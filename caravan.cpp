@@ -10,12 +10,14 @@
  * <your description here>
  *-----------------------------------------------------------------------------
 */
+
+#include "caravan.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "pack_animal.h"
-#include "caravan.h"
+#include "general.h"
 
-struct Node{
+
+struct Node {
   PackAnimal data;
   struct Node* next;
 };
@@ -28,35 +30,44 @@ struct CaravanImplementation{
 
 Caravan new_caravan()
 {
-    Caravan new_caravan = (Caravan)malloc(sizeof(struct CaravanImplementation));
-    return new_caravan;
+  Caravan new_c = (Caravan)malloc(sizeof(struct CaravanImplementation));
+  return new_c;
 }
 
 int get_length(Caravan caravan)
 {
-  if(caravan->head->data != NULL){
-    return 1;
-  }
-  return 0;
+  return caravan->length;
+
 }
 
 void delete_caravan(Caravan caravan)
 {
+  sfree(caravan);
 }
 
 void add_pack_animal(Caravan caravan, PackAnimal animal)
 {
-  if(caravan->head->data == NULL){
-    caravan->head->data = animal;
+  if (animal == 0) {
+    return;
   }
-  else{
-    Node* curr = caravan->head;
-    while(curr->next->data == NULL){
-      curr = curr->next;
-    }
-    curr->next->data = animal;
+  struct Node* new_pack_animal = (struct Node*)malloc(sizeof(struct Node*));
+  new_pack_animal->data = animal;
+  new_pack_animal->next = 0;
+  add_to_caravan(new_pack_animal->data,caravan);
+
+
+  if(caravan->head == 0)
+  {
+    caravan->head = new_pack_animal;
+    caravan->tail = caravan->head;
   }
-  caravan->length += 1;
+  else
+  {
+    caravan->tail->next = new_pack_animal;
+    caravan->tail = caravan->tail->next;
+  }
+    caravan->length++;
+
 
 }
 
@@ -71,10 +82,14 @@ int get_caravan_load(Caravan caravan)
 
 void unload(Caravan caravan)
 {
+
 }
 
 int get_caravan_speed(Caravan caravan)
 {
   return 0;
 }
-void optimize_load(Caravan caravan){}
+
+void optimize_load(Caravan caravan){
+
+}
